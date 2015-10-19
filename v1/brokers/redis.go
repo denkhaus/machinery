@@ -77,6 +77,7 @@ func (redisBroker *RedisBroker) StartConsuming(consumerTag string, taskProcessor
 
 		log.Print("[*] Waiting for messages. To exit press CTRL+C")
 
+		sleep := time.Duration(redisBroker.config.RedisConsumerSleep)
 		conn := redisBroker.pool.Get()
 
 		for {
@@ -90,9 +91,10 @@ func (redisBroker *RedisBroker) StartConsuming(consumerTag string, taskProcessor
 					redisBroker.errorsChan <- err
 					return
 				}
+
 				// Unline BLPOP, LPOP is non blocking so nil means we can keep iterating
 				if itemBytes == nil {
-					time.Sleep(1 * time.Second)
+					time.Sleep(sleep * time.Millisecond)
 					continue
 				}
 
