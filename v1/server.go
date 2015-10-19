@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/RichardKnop/machinery/v1/backends"
-	"github.com/RichardKnop/machinery/v1/brokers"
-	"github.com/RichardKnop/machinery/v1/config"
-	"github.com/RichardKnop/machinery/v1/signatures"
+	"github.com/gitmonster/machinery/v1/backends"
+	"github.com/gitmonster/machinery/v1/brokers"
+	"github.com/gitmonster/machinery/v1/config"
+	"github.com/gitmonster/machinery/v1/signatures"
 	"github.com/pborman/uuid"
 )
 

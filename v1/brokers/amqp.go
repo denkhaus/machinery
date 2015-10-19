@@ -7,9 +7,9 @@ import (
 	"log"
 	"sync"
 
-	"github.com/RichardKnop/machinery/v1/config"
-	"github.com/RichardKnop/machinery/v1/signatures"
-	"github.com/RichardKnop/machinery/v1/utils"
+	"github.com/gitmonster/machinery/v1/config"
+	"github.com/gitmonster/machinery/v1/signatures"
+	"github.com/gitmonster/machinery/v1/utils"
 	"github.com/streadway/amqp"
 )
 
@@ -164,11 +164,10 @@ func (amqpBroker *AMQPBroker) consumeOne(d amqp.Delivery, taskProcessor TaskProc
 		return
 	}
 
-
 	if err := taskProcessor.Process(&signature); err != nil {
 		errorsChan <- err
 	}
-	
+
 	d.Ack(false) // multiple
 }
 

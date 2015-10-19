@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 
-	"github.com/RichardKnop/machinery/_examples/tasks"
-	machinery "github.com/RichardKnop/machinery/v1"
-	"github.com/RichardKnop/machinery/v1/config"
-	"github.com/RichardKnop/machinery/v1/errors"
+	"github.com/gitmonster/machinery/_examples/tasks"
+	machinery "github.com/gitmonster/machinery/v1"
+	"github.com/gitmonster/machinery/v1/config"
+	"github.com/gitmonster/machinery/v1/errors"
 )
 
 // Define flags

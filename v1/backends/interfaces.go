@@ -1,7 +1,7 @@
 package backends
 
 import (
-	"github.com/RichardKnop/machinery/v1/signatures"
+	"github.com/gitmonster/machinery/v1/signatures"
 )
 
 // Backend - a common interface for all result backends

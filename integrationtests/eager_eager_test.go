@@ -4,9 +4,9 @@ import (
 	"reflect"
 	"testing"
 
-	machinery "github.com/RichardKnop/machinery/v1"
-	"github.com/RichardKnop/machinery/v1/config"
-	"github.com/RichardKnop/machinery/v1/signatures"
+	machinery "github.com/gitmonster/machinery/v1"
+	"github.com/gitmonster/machinery/v1/config"
+	"github.com/gitmonster/machinery/v1/signatures"
 	"github.com/stretchr/testify/suite"
 )
 

@@ -1,6 +1,6 @@
 package brokers
 
-import "github.com/RichardKnop/machinery/v1/signatures"
+import "github.com/gitmonster/machinery/v1/signatures"
 
 // Broker - a common interface for all brokers
 type Broker interface {

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/RichardKnop/machinery/v1/signatures"
+	"github.com/gitmonster/machinery/v1/signatures"
 )
 
 type EagerBroker struct {
@@ -27,7 +27,7 @@ func (e *EagerBroker) SetRegisteredTaskNames(names []string) {
 	// do nothing
 }
 
-func (e *EagerBroker)  IsTaskRegistered(name string) bool {
+func (e *EagerBroker) IsTaskRegistered(name string) bool {
 	return true
 }
 

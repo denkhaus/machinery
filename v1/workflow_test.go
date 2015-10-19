@@ -3,7 +3,7 @@ package machinery
 import (
 	"testing"
 
-	"github.com/RichardKnop/machinery/v1/signatures"
+	"github.com/gitmonster/machinery/v1/signatures"
 )
 
 func TestNewChain(t *testing.T) {
