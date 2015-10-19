@@ -92,6 +92,7 @@ func (redisBroker *RedisBroker) StartConsuming(consumerTag string, taskProcessor
 				}
 				// Unline BLPOP, LPOP is non blocking so nil means we can keep iterating
 				if itemBytes == nil {
+					time.Sleep(1 * time.Second)
 					continue
 				}
 
