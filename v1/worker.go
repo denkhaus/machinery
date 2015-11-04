@@ -6,9 +6,9 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/gitmonster/machinery/v1/backends"
-	"github.com/gitmonster/machinery/v1/signatures"
-	"github.com/gitmonster/machinery/v1/utils"
+	"github.com/denkhaus/machinery/v1/backends"
+	"github.com/denkhaus/machinery/v1/signatures"
+	"github.com/denkhaus/machinery/v1/utils"
 )
 
 // Worker represents a single worker process

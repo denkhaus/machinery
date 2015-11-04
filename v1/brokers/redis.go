@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/denkhaus/machinery/v1/config"
+	"github.com/denkhaus/machinery/v1/signatures"
+	"github.com/denkhaus/machinery/v1/utils"
 	"github.com/garyburd/redigo/redis"
-	"github.com/gitmonster/machinery/v1/config"
-	"github.com/gitmonster/machinery/v1/signatures"
-	"github.com/gitmonster/machinery/v1/utils"
 )
 
 // RedisBroker represents a Redis broker
@@ -81,7 +81,7 @@ func (redisBroker *RedisBroker) StartConsuming(consumerTag string, taskProcessor
 
 		consumerSleep := time.Duration(1000 * time.Millisecond)
 		if redisBroker.config.RedisConsumerSleep != 0 {
-			consumerSleep = time.Duration(redisBroker.config.RedisConsumerSleep * time.Millisecond)
+			consumerSleep = time.Duration(time.Duration(redisBroker.config.RedisConsumerSleep) * time.Millisecond)
 		}
 
 		conn := redisBroker.pool.Get()

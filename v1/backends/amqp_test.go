@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gitmonster/machinery/v1/config"
-	"github.com/gitmonster/machinery/v1/signatures"
+	"github.com/denkhaus/machinery/v1/config"
+	"github.com/denkhaus/machinery/v1/signatures"
 )
 
 var (

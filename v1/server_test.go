@@ -3,7 +3,7 @@ package machinery
 import (
 	"testing"
 
-	"github.com/gitmonster/machinery/v1/config"
+	"github.com/denkhaus/machinery/v1/config"
 )
 
 func TestRegisterTasks(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"reflect"
 
-	"github.com/gitmonster/machinery/v1/signatures"
-	"github.com/gitmonster/machinery/v1/utils"
+	"github.com/denkhaus/machinery/v1/signatures"
+	"github.com/denkhaus/machinery/v1/utils"
 )
 
 // AsyncResult represents a task result

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gitmonster/machinery/v1/backends"
-	"github.com/gitmonster/machinery/v1/brokers"
-	"github.com/gitmonster/machinery/v1/config"
+	"github.com/denkhaus/machinery/v1/backends"
+	"github.com/denkhaus/machinery/v1/brokers"
+	"github.com/denkhaus/machinery/v1/config"
 )
 
 // BrokerFactory creates a new object with brokers.Broker interface

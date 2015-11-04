@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gitmonster/machinery/v1/signatures"
+	"github.com/denkhaus/machinery/v1/signatures"
 )
 
 type EagerBackend struct {
