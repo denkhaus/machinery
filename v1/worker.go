@@ -26,10 +26,12 @@ func (worker *Worker) Launch() error {
 	log.Printf("Launching a worker with the following settings:")
 	log.Printf("- Broker: %s", cnf.Broker)
 	log.Printf("- ResultBackend: %s", cnf.ResultBackend)
+	log.Printf("- ResultsExpireIn: %d", cnf.ResultsExpireIn)
 	log.Printf("- Exchange: %s", cnf.Exchange)
 	log.Printf("- ExchangeType: %s", cnf.ExchangeType)
 	log.Printf("- DefaultQueue: %s", cnf.DefaultQueue)
 	log.Printf("- BindingKey: %s", cnf.BindingKey)
+	log.Printf("- RedisConsumerSleep: %d ms", cnf.RedisConsumerSleep)
 
 	errorsChan := make(chan error)
 
