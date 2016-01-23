@@ -1,16 +1,16 @@
 [1]: https://raw.githubusercontent.com/RichardKnop/assets/master/machinery/example_worker.png
 [2]: https://raw.githubusercontent.com/RichardKnop/assets/master/machinery/example_worker_receives_tasks.png
 
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg "GoDoc")](http://godoc.org/github.com/RichardKnop/machinery/v1)
-[![Build Status](https://travis-ci.org/RichardKnop/machinery.svg?branch=master "Build Status")](https://travis-ci.org/RichardKnop/machinery)
+[![Codeship Status for RichardKnop/go-oauth2-server](https://codeship.com/projects/35dc5880-71a7-0133-ec05-06b1c29ec1d7/status?branch=master)](https://codeship.com/projects/116440)
+
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/RichardKnop/machinery/v1)
+[![Travis Status for RichardKnop/machinery](https://travis-ci.org/RichardKnop/machinery.svg?branch=master)](https://travis-ci.org/RichardKnop/machinery)
 
 # Machinery
 
 Machinery is an asynchronous task queue/job queue based on distributed message passing.
 
 So called tasks (or jobs if you like) are executed concurrently either by many workers on many servers or multiple worker processes on a single server using Golang's goroutines.
-
-This is an early stage project so far. Feel free to contribute.
 
 - [First Steps](https://github.com/RichardKnop/machinery#first-steps)
 - [Configuration](https://github.com/RichardKnop/machinery#configuration)
@@ -39,15 +39,16 @@ $ go get github.com/RichardKnop/machinery
 Install dependencies:
 
 ```
-$ make deps
+$ cd $GOPATH/src/github.com/RichardKnop/machinery
+$ make install-deps
 ```
 
-First, you will need to define some tasks. Look at sample tasks in `_examples/tasks/tasks.go` to see few examples.
+First, you will need to define some tasks. Look at sample tasks in `examples/tasks/tasks.go` to see a few examples.
 
 Second, you will need to launch a worker process:
 
 ```
-$ go run _examples/worker/worker.go
+$ go run examples/worker/worker.go
 ```
 
 ![Example worker][1]
@@ -55,7 +56,7 @@ $ go run _examples/worker/worker.go
 Finally, once you have a worker running and waiting for tasks to consume, send some tasks:
 
 ```
-$ go run _examples/send/send.go
+$ go run examples/send/send.go
 ```
 
 You will be able to see the tasks being processed asynchronously by the worker:
@@ -68,13 +69,13 @@ Machinery has several configuration options. Configuration is encapsulated by a 
 
 ```go
 type Config struct {
-	Broker          string `yaml:"broker"`
-	ResultBackend   string `yaml:"result_backend"`
-	ResultsExpireIn int    `yaml:"results_expire_in"`
-	Exchange        string `yaml:"exchange"`
-	ExchangeType    string `yaml:"exchange_type"`
-	DefaultQueue    string `yaml:"default_queue"`
-	BindingKey      string `yaml:"binding_key"`
+  Broker          string `yaml:"broker"`
+  ResultBackend   string `yaml:"result_backend"`
+  ResultsExpireIn int    `yaml:"results_expire_in"`
+  Exchange        string `yaml:"exchange"`
+  ExchangeType    string `yaml:"exchange_type"`
+  DefaultQueue    string `yaml:"default_queue"`
+  BindingKey      string `yaml:"binding_key"`
 }
 ```
 
@@ -124,22 +125,22 @@ A Machinery library must be instantiated before use. The way this is done is by 
 ```go
 
 import (
-    "github.com/RichardKnop/machinery/v1/config"
-    machinery "github.com/RichardKnop/machinery/v1"
+  "github.com/RichardKnop/machinery/v1/config"
+  machinery "github.com/RichardKnop/machinery/v1"
 )
 
 var cnf = config.Config{
-    Broker:        "amqp://guest:guest@localhost:5672/",
-    ResultBackend: "amqp://guest:guest@localhost:5672/",
-    Exchange:      "machinery_exchange",
-    ExchangeType:  "direct",
-    DefaultQueue:  "machinery_tasks",
-    BindingKey:    "machinery_task",
+  Broker:        "amqp://guest:guest@localhost:5672/",
+  ResultBackend: "amqp://guest:guest@localhost:5672/",
+  Exchange:      "machinery_exchange",
+  ExchangeType:  "direct",
+  DefaultQueue:  "machinery_tasks",
+  BindingKey:    "machinery_task",
 }
 
 server, err := machinery.NewServer(&cnf)
 if err != nil {
-    // do something with the error
+  // do something with the error
 }
 ```
 
@@ -151,7 +152,7 @@ In order to consume tasks, you need to have one or more workers running. All you
 worker := server.NewWorker("worker_name")
 err := worker.Launch()
 if err != nil {
-    // do something with the error
+  // do something with the error
 }
 ```
 
@@ -163,19 +164,19 @@ Tasks are a building block of Machinery applications. A task is a function which
 
 ```go
 func Add(args ...int64) (int64, error) {
-    sum := int64(0)
-    for _, arg := range args {
-        sum += arg
-    }
-    return sum, nil
+  sum := int64(0)
+  for _, arg := range args {
+    sum += arg
+  }
+  return sum, nil
 }
 
 func Multiply(args ...int64) (int64, error) {
-    sum := int64(1)
-    for _, arg := range args {
-        sum *= arg
-    }
-    return sum, nil
+  sum := int64(1)
+  for _, arg := range args {
+    sum *= arg
+  }
+  return sum, nil
 }
 ```
 
@@ -185,8 +186,8 @@ Before your workers can consume a task, you need to register it with the server.
 
 ```go
 server.RegisterTasks(map[string]interface{}{
-    "add":      Add,
-    "multiply": Multiply,
+  "add":      Add,
+  "multiply": Multiply,
 })
 ```
 
@@ -201,25 +202,25 @@ Simply put, when a worker receives a message like this:
 
 ```json
 {
-    "UUID": "48760a1a-8576-4536-973b-da09048c2ac5",
-    "Name": "add",
-    "RoutingKey": "",
-    "GroupUUID": "",
-    "GroupTaskCount": 0,
-    "Args": [
-        {
-            "Type": "int64",
-            "Value": 1,
-        },
-        {
-            "Type": "int64",
-            "Value": 1,
-        }
-    ],
-    "Immutable": false,
-    "OnSuccess": null,
-    "OnError": null,
-    "ChordCallback": null
+  "UUID": "48760a1a-8576-4536-973b-da09048c2ac5",
+  "Name": "add",
+  "RoutingKey": "",
+  "GroupUUID": "",
+  "GroupTaskCount": 0,
+  "Args": [
+    {
+      "Type": "int64",
+      "Value": 1,
+    },
+    {
+      "Type": "int64",
+      "Value": 1,
+    }
+  ],
+  "Immutable": false,
+  "OnSuccess": null,
+  "OnError": null,
+  "ChordCallback": null
 }
 ```
 
@@ -233,21 +234,21 @@ A signature wraps calling arguments, execution options (such as immutability) an
 
 ```go
 type TaskArg struct {
-    Type  string
-    Value interface{}
+  Type  string
+  Value interface{}
 }
 
 type TaskSignature struct {
-    UUID           string
-    Name           string
-    RoutingKey     string
-    GroupUUID      string
-    GroupTaskCount int
-    Args           []TaskArg
-    Immutable      bool
-    OnSuccess      []*TaskSignature
-    OnError        []*TaskSignature
-    ChordCallback  *TaskSignature
+  UUID           string
+  Name           string
+  RoutingKey     string
+  GroupUUID      string
+  GroupTaskCount int
+  Args           []TaskArg
+  Immutable      bool
+  OnSuccess      []*TaskSignature
+  OnError        []*TaskSignature
+  ChordCallback  *TaskSignature
 }
 ```
 
@@ -296,23 +297,23 @@ Tasks can be called by passing an instance of `TaskSignature` to an `Server` ins
 import "github.com/RichardKnop/machinery/v1/signatures"
 
 task := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
+    },
+  },
 }
 
 asyncResult, err := server.SendTask(&task1)
 if err != nil {
-    // failed to send the task
-    // do something with the error
+  // failed to send the task
+  // do something with the error
 }
 ```
 
@@ -322,11 +323,11 @@ If you configure a result backend, the task states and results will be persisted
 
 ```go
 const (
-    PendingState  = "PENDING"
-    ReceivedState = "RECEIVED"
-    StartedState  = "STARTED"
-    SuccessState  = "SUCCESS"
-    FailureState  = "FAILURE"
+  PendingState  = "PENDING"
+  ReceivedState = "RECEIVED"
+  StartedState  = "STARTED"
+  SuccessState  = "SUCCESS"
+  FailureState  = "FAILURE"
 )
 ```
 
@@ -334,20 +335,20 @@ const (
 
 ```go
 type TaskResult struct {
-    Type  string
-    Value interface{}
+  Type  string
+  Value interface{}
 }
 
 type TaskState struct {
-    TaskUUID string
-    State    string
-    Result   *TaskResult
-    Error    string
+  TaskUUID string
+  State    string
+  Result   *TaskResult
+  Error    string
 }
 
 type GroupMeta struct {
-	GroupUUID string
-	TaskUUIDs []string
+  GroupUUID string
+  TaskUUIDs []string
 }
 ```
 
@@ -378,8 +379,8 @@ You can also do a synchronous blocking call to wait for a task result:
 ```go
 result, err := asyncResult.Get()
 if err != nil {
-    // getting result of a task failed
-    // do something with the error
+  // getting result of a task failed
+  // do something with the error
 }
 fmt.Println(result.Interface())
 ```
@@ -394,43 +395,43 @@ Running a single asynchronous task is fine but often you will want to design a w
 
 ```go
 import (
-    "github.com/RichardKnop/machinery/v1/signatures"
-    machinery "github.com/RichardKnop/machinery/v1"
+  "github.com/RichardKnop/machinery/v1/signatures"
+  machinery "github.com/RichardKnop/machinery/v1"
 )
 
 task1 := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
+    },
+  },
 }
 
 task2 := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 5,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 5,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 5,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 5,
+    },
+  },
 }
 
 group := machinery.NewGroup(&task1, &task2)
 asyncResults, err := server.SendGroup(group)
 if err != nil {
-    // failed to send the group
-    // do something with the error
+  // failed to send the group
+  // do something with the error
 }
 ```
 
@@ -438,12 +439,12 @@ if err != nil {
 
 ```go
 for _, asyncResult := range asyncResults {
-    result, err := asyncResult.Get()
-    if err != nil {
-        // getting result of a task failed
-        // do something with the error
-    }
-    fmt.Println(result.Interface())
+  result, err := asyncResult.Get()
+  if err != nil {
+    // getting result of a task failed
+    // do something with the error
+  }
+  fmt.Println(result.Interface())
 }
 ```
 
@@ -453,48 +454,48 @@ for _, asyncResult := range asyncResults {
 
 ```go
 import (
-    "github.com/RichardKnop/machinery/v1/signatures"
-    machinery "github.com/RichardKnop/machinery/v1"
+  "github.com/RichardKnop/machinery/v1/signatures"
+  machinery "github.com/RichardKnop/machinery/v1"
 )
 
 task1 := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
+    },
+  },
 }
 
 task2 := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 5,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 5,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 5,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 5,
+    },
+  },
 }
 
 task3 := signatures.TaskSignature{
-    Name: "multiply",
+  Name: "multiply",
 }
 
 group := machinery.NewGroup(&task1, &task2)
 chord := machinery.NewChord(group, &task3)
 chordAsyncResult, err := server.SendChord(chord)
 if err != nil {
-    // failed to send the chord
-    // do something with the error
+  // failed to send the chord
+  // do something with the error
 }
 ```
 
@@ -515,8 +516,8 @@ More explicitely:
 ```go
 result, err := chordAsyncResult.Get()
 if err != nil {
-    // getting result of a chord failed
-    // do something with the error
+  // getting result of a chord failed
+  // do something with the error
 }
 fmt.Println(result.Interface())
 ```
@@ -527,53 +528,53 @@ fmt.Println(result.Interface())
 
 ```go
 import (
-    "github.com/RichardKnop/machinery/v1/signatures"
-    machinery "github.com/RichardKnop/machinery/v1"
+  "github.com/RichardKnop/machinery/v1/signatures"
+  machinery "github.com/RichardKnop/machinery/v1"
 )
 
 task1 := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 1,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 1,
+    },
+  },
 }
 
 task2 := signatures.TaskSignature{
-    Name: "add",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 5,
-        },
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 5,
-        },
+  Name: "add",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 5,
     },
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 5,
+    },
+  },
 }
 
 task3 := signatures.TaskSignature{
-    Name: "multiply",
-    Args: []signatures.TaskArg{
-        signatures.TaskArg{
-            Type:  "int64",
-            Value: 4,
-        },
+  Name: "multiply",
+  Args: []signatures.TaskArg{
+    signatures.TaskArg{
+      Type:  "int64",
+      Value: 4,
     },
+  },
 }
 
 chain := machinery.NewChain(&task1, &task2, &task3)
 chainAsyncResult, err := server.SendChain(chain)
 if err != nil {
-    // failed to send the chain
-    // do something with the error
+  // failed to send the chain
+  // do something with the error
 }
 ```
 
@@ -594,8 +595,8 @@ More explicitely:
 ```go
 result, err := chainAsyncResult.Get()
 if err != nil {
-    // getting result of a chain failed
-    // do something with the error
+  // getting result of a chain failed
+  // do something with the error
 }
 fmt.Println(result.Interface())
 ```

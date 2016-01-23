@@ -1,7 +1,6 @@
 package machinery
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"reflect"
@@ -79,6 +78,7 @@ func (worker *Worker) Process(signature *signatures.TaskSignature) error {
 	reflectedTask := reflect.ValueOf(task)
 	relfectedArgs, err := worker.reflectArgs(signature.Args)
 	if err != nil {
+		worker.finalizeError(signature, err)
 		return fmt.Errorf("Reflect task args: %v", err)
 	}
 
@@ -90,7 +90,7 @@ func (worker *Worker) Process(signature *signatures.TaskSignature) error {
 	// Call the task passing in the correct arguments
 	results := reflectedTask.Call(relfectedArgs)
 	if !results[1].IsNil() {
-		return worker.finalizeError(signature, errors.New(results[1].String()))
+		return worker.finalizeError(signature, results[1].Interface().(error))
 	}
 
 	return worker.finalizeSuccess(signature, results[0])

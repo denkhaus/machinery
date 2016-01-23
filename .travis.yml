@@ -2,8 +2,7 @@
 language: go
 
 go:
-  - 1.4.3
-  - 1.5.1
+  - 1.5.2
 
 services:
   - rabbitmq
@@ -14,4 +13,5 @@ branches:
   only:
     - master
 
-script: make install-deps && make test
+script: 
+  - make test

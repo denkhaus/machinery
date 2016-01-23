@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/denkhaus/machinery/_examples/tasks"
+	"github.com/denkhaus/machinery/examples/tasks"
 	machinery "github.com/denkhaus/machinery/v1"
 	"github.com/denkhaus/machinery/v1/config"
 	"github.com/denkhaus/machinery/v1/errors"
